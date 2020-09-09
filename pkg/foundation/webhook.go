@@ -97,7 +97,7 @@ func WebhookDeployment(m *operatorsv1.MultiClusterHub, overrides map[string]stri
 	dep.SetOwnerReferences([]metav1.OwnerReference{
 		*metav1.NewControllerRef(m, m.GetObjectKind().GroupVersionKind()),
 	})
-	return dep
+	return annotated(dep)
 }
 
 // WebhookService creates a service object for the foundation webhook

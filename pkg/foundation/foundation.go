@@ -4,6 +4,8 @@ package foundation
 
 import (
 	"bytes"
+	"crypto/sha1"
+	"encoding/hex"
 
 	operatorsv1 "github.com/open-cluster-management/multicloudhub-operator/pkg/apis/operator/v1"
 	"github.com/open-cluster-management/multicloudhub-operator/pkg/utils"
@@ -52,6 +54,28 @@ func getReplicaCount(mch *operatorsv1.MultiClusterHub) int32 {
 		return 1
 	}
 	return 2
+}
+
+func Compare(got, want *appsv1.Deployment) bool {
+	var log = logf.Log.WithValues("Deployment.Namespace", got.GetNamespace(), "Deployment.Name", got.GetName())
+
+	current, err := yaml.Marshal(want)
+	// log.Info(string(current))
+	if err != nil {
+		log.Error(err, "issue parsing current cluster manager values")
+	}
+	h := sha1.New()
+	h.Write(current)
+	bs := h.Sum(nil)
+	hx := hex.EncodeToString(bs)
+
+	if hx != want.GetAnnotations()["installer.open-cluster-management.io/last-applied-configuration"] {
+		log.Info("Hashes don't match. Update needed.", "Wanted", hx)
+		return false
+	} else {
+		log.Info("Hashes match.")
+		return true
+	}
 }
 
 // ValidateDeployment returns a deep copy of the deployment with the desired spec based on the MultiClusterHub spec.
@@ -129,4 +153,27 @@ func ValidateClusterManager(found *unstructured.Unstructured, want *unstructured
 	}
 
 	return nil, false
+}
+
+// annotated modifies a deployment and sets an annotation with the hash of the deployment spec
+func annotated(dep *appsv1.Deployment) *appsv1.Deployment {
+	var log = logf.Log.WithValues("Deployment.Namespace", dep.GetNamespace(), "Deployment.Name", dep.GetName())
+
+	spec, err := yaml.Marshal(dep)
+	if err != nil {
+		log.Error(err, "Couldn't marshal deployment spec. Hash not assigned.")
+		return dep
+	}
+	h := sha1.New()
+	h.Write(spec)
+	bs := h.Sum(nil)
+	hx := hex.EncodeToString(bs)
+
+	if dep.Annotations == nil {
+		dep.SetAnnotations(map[string]string{"installer.open-cluster-management.io/last-applied-configuration": hx})
+	} else {
+		dep.Annotations["installer.open-cluster-management.io/last-applied-configuration"] = hx
+	}
+
+	return dep
 }

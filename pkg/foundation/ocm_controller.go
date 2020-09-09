@@ -96,5 +96,6 @@ func OCMControllerDeployment(m *operatorsv1.MultiClusterHub, overrides map[strin
 	dep.SetOwnerReferences([]metav1.OwnerReference{
 		*metav1.NewControllerRef(m, m.GetObjectKind().GroupVersionKind()),
 	})
-	return dep
+
+	return annotated(dep)
 }

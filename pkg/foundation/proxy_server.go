@@ -103,7 +103,7 @@ func OCMProxyServerDeployment(m *operatorsv1.MultiClusterHub, overrides map[stri
 	dep.SetOwnerReferences([]metav1.OwnerReference{
 		*metav1.NewControllerRef(m, m.GetObjectKind().GroupVersionKind()),
 	})
-	return dep
+	return annotated(dep)
 }
 
 // OCMProxyServerService creates a service object for the ocm proxy server
