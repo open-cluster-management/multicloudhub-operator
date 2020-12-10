@@ -25,10 +25,12 @@ require (
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
 	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
-	k8s.io/api v0.18.3
-	k8s.io/apiextensions-apiserver v0.18.3
-	k8s.io/apimachinery v0.18.3
+	gopkg.in/yaml.v2 v2.3.0
+	helm.sh/helm/v3 v3.3.0
+	k8s.io/api v0.18.4
+	k8s.io/apiextensions-apiserver v0.18.4
+	k8s.io/apimachinery v0.18.4
+	k8s.io/cli-runtime v0.18.4
 	k8s.io/client-go v13.0.0+incompatible
 	k8s.io/klog v1.0.0
 	k8s.io/kube-aggregator v0.18.3
@@ -42,6 +44,7 @@ require (
 replace (
 	github.com/Azure/go-autorest => github.com/Azure/go-autorest v13.3.2+incompatible // Required by OLM
 	github.com/jetstack/cert-manager => github.com/open-cluster-management/cert-manager v0.0.0-20200821135248-2fd523b053f5
+	github.com/russross/blackfriday => github.com/russross/blackfriday v1.5.2
 	k8s.io/api => k8s.io/api v0.18.3
 	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.18.3
 	k8s.io/apimachinery => k8s.io/apimachinery v0.18.3
