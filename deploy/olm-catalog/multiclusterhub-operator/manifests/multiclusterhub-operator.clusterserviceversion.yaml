@@ -225,6 +225,7 @@ spec:
           - storage.k8s.io
           - apps.open-cluster-management.io
           - hive.openshift.io
+          - discovery.open-cluster-management.io
           resources:
           - apiservices
           - helmreleases
@@ -232,6 +233,7 @@ spec:
           - configmaps
           - clusterjoinrequests
           - deployments
+          - discoveryconfigs
           - ingresses
           - multiclusterhubs
           - namespaces
